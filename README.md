@@ -1,6 +1,6 @@
-[this docker image](https://hub.docker.com/repository/docker/coreycothrum/nginx) is meant to be used in conjunction with [coreycothrum/certbot_docker](https://github.com/coreycothrum/certbot_docker).
+[this docker image](https://hub.docker.com/repository/docker/coreycothrum/nginx) is meant to be used in conjunction with [coreycothrum/certbot_docker](https://github.com/coreycothrum/certbot_docker)
 
-**see [coreycothrum/nginx_certbot_docker_compose](https://github.com/coreycothrum/nginx_certbot_docker_compose) as an example.**
+**see [coreycothrum/nginx_certbot_docker_compose](https://github.com/coreycothrum/nginx_certbot_docker_compose) as an example**
 
 ### what this image is
 an extention of the official [nginx docker image](https://hub.docker.com/_/nginx) to make integration with [certbot](https://certbot.eff.org/) easier. Key features:
@@ -15,17 +15,41 @@ The goal of this image is to:
 ## environment variables
 appropriate defaults are defined in `.env`
 
-**`DOMAIN_NAME` should be changed in any production/real (i.e. not localhost) deployment.** The others should be left alone.
+**`DOMAIN_NAME` should be changed in any production/real (i.e. not localhost) deployment.**
 
 | variable name          | default value         | description                 |
 | ---------------------- | --------------------- | --------------------------- |
 | `DOMAIN_NAME`          | `localhost.localhost` | domain name of server       |
 
-## overwrite `nginx.conf` with custom config
-a basic `nginx.conf` is provided. use this as reference, though it'll probably need to be overwritten:
+## custom configuration options
+a default NGINX config is provided. It was generated with help from: https://ssl-config.mozilla.org. It's a good one.
 
+It has hooks to customize for your needs without completely overwritting it. Do that if possible. See the subsections below for more information.
+
+### custom static content
+the default config will serve `/usr/share/nginx/html` via HTTPS.
+To serve custom static content, simply [tell docker to mount](https://github.com/docker-library/docs/tree/master/nginx#hosting-some-simple-static-content) a local directory there:
+
+    -v /path/to/new/html/root/:/usr/share/nginx/html/:ro
+
+No other changes are needed for this simple case.
+
+see [coreycothrum/nginx_certbot_docker_compose](https://github.com/coreycothrum/nginx_certbot_docker_compose) for an example of this
+
+### more/different location blocks
+alternatively, you can supply your own server `location` block(s) by overwritting `/etc/nginx/locations/default.conf`:
+
+    -v /path/to/new/locations.conf:/etc/nginx/locations/default.conf:ro
+
+see [coreycothrum/fastapi_template](https://github.com/coreycothrum/fastapi_template) for an example of this
+
+### advanced/custom config file
+to make more significant changes, overwrite the nginx conf file(s) [as you normally would](https://github.com/docker-library/docs/tree/master/nginx#complex-configuration):
+
+    # for example
     -v /path/to/new/config.conf:/etc/nginx/templates/default.conf.template:ro
 
-probably also want to overwrite the HTML doc root:
+    # or more sledgehammer style
+    -v /path/to/new/conf/dir:/etc/nginx/:ro
 
-    -v /path/to/new/html/root/:/usr/share/nginx/html/:ro # or whatever DEST the new config expects
+see the [official NGINX image](https://hub.docker.com/_/nginx) documentation for more information
