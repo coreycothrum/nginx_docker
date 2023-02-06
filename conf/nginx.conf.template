@@ -41,5 +41,5 @@ server {
 
     resolver 127.0.0.1;
 
-    include /etc/nginx/locations/default.conf;
+    include /etc/nginx/conf.d/default.locations;
 }
