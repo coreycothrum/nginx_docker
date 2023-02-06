@@ -47,7 +47,7 @@ see [coreycothrum/fastapi_template](https://github.com/coreycothrum/fastapi_temp
 to make more significant changes, overwrite the nginx conf file(s) [as you normally would](https://github.com/docker-library/docs/tree/master/nginx#complex-configuration):
 
     # for example
-    -v /path/to/new/config.conf:/etc/nginx/templates/default.conf.template:ro
+    -v /path/to/new/default.conf.template:/etc/nginx/templates/default.conf.template:ro
 
     # or more sledgehammer style
     -v /path/to/new/conf/dir:/etc/nginx/:ro
