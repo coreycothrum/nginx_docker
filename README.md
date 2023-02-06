@@ -37,9 +37,9 @@ No other changes are needed for this simple case.
 see [coreycothrum/nginx_certbot_docker_compose](https://github.com/coreycothrum/nginx_certbot_docker_compose) for an example of this
 
 ### more/different location blocks
-alternatively, you can supply your own server `location` block(s) by overwritting `/etc/nginx/conf.d/default.locations`:
+alternatively, you can supply your own server `location` block(s) by overwritting `/etc/nginx/templates/default.locations.template`:
 
-    -v /path/to/new/default.locations:/etc/nginx/conf.d/default.locations:ro
+    -v /path/to/new/default.locations.template:/etc/nginx/conf.d/default.locations.template:ro
 
 see [coreycothrum/fastapi_template](https://github.com/coreycothrum/fastapi_template) for an example of this
 
